@@ -72,9 +72,18 @@
 
 // ********************************************
 // Promesas en cadena
-const getPokemonById = require('./js-foundation/06.2-promises-async-await');
+// const getPokemonById = require('./js-foundation/06.2-promises-async-await');
 
-getPokemonById(1)
- .then(pokemon => console.log({pokemon}))
- .catch(error => console.error(`[Promise error] ${error}`))
- .finally(_finally => console.log('[Promise] Success'))
+// getPokemonById(1)
+//  .then(pokemon => console.log({pokemon}))
+//  .catch(error => console.error(`[Promise error] ${error}`))
+//  .finally(_finally => console.log('[Promise] Success'))
+
+
+
+// ********************************************
+// implementacion de un logger
+const { buildLogger } = require('./plugins');
+const logger = buildLogger('app.js');
+logger.log('Probando el logger de winston con la adaptacion');
+logger.error('Probando el logger de winston con la adaptacion y un error');
