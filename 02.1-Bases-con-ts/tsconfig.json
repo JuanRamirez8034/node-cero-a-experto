@@ -1,4 +1,8 @@
 {
+  // configuracion para evitar eror (jest.config.ts está fuera del rootDir de TypeScript Config)
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts","**/*.test.ts"],
+  
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
