@@ -22,8 +22,9 @@ export class CreateTable implements CreateTableUseCase {
    */
   public execute({base, limit=12}: CreateTableOptions) {
     let tableString: string = this._createHeader(base);
-    for(let index = 1; index <= (limit ?? 10); index++){
-      const fragment = `${base} X ${index} = ${index * base}\n`;
+    for(let index = 1; index <= limit; index++){
+      // agregamos un salto de linea siempre que reste una iteracion mas
+      const fragment = `${base} X ${index} = ${index * base}` + ((index < limit) ? '\n' : '');
       tableString += fragment;
     }
     return tableString;

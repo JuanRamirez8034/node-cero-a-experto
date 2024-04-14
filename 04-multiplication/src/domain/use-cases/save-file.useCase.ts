@@ -1,4 +1,4 @@
-import { createWriteStream, existsSync, mkdirSync } from "fs";
+import { /**createWriteStream,*/ existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 
 export interface SaveFileUsecase {
@@ -33,13 +33,14 @@ export class SaveFile implements SaveFileUsecase {
       // añadiendo el nombre del archivo a la ruta del directorio
       _dirPatch = path.join(_dirPatch, (fileName ?? 'table') + '.txt');
       // creando el archivo
-      const writer = createWriteStream(`${_dirPatch}`, {encoding:'utf-8'});
-      writer.write(fileContent);
-      writer.close();
+      writeFileSync(`${_dirPatch}`, fileContent, {encoding: 'utf-8'});
+      // const writer = createWriteStream(`${_dirPatch}`, {encoding:'utf-8'});
+      // writer.write(fileContent);
+      // writer.close();
       // retornando respuesta
       return true;
     } catch (error) {
-      console.error(error);
+      // console.error(error); // colocar con un logger
       return false;
     }
   }
