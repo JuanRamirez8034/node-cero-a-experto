@@ -1,5 +1,7 @@
 # Ejecplos de como utilizar http en sus diferentes veriones
 
+## Crear el archivo de variables de entorno a partir del archivo [.env.template](.env.template)
+
 ## Instalar OpenSSL 
 Se debe ejecutar el siguiente comando e ir colocando los datos respectivos:
 ```cmd
