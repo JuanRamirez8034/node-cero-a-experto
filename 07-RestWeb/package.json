@@ -2,7 +2,7 @@
   "name": "restweb",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.ts",
   "scripts": {
     "dev": "tsnd --respawn --clear src/app.ts",
     "dev:analize": "npm run eslint && npm run dev",
