@@ -1,19 +1,28 @@
-# Ejecplos de como utilizar http en sus diferentes veriones
+# Pasos para correr proyecto forma local (desarrollo)
 
-## Crear el archivo de variables de entorno a partir del archivo [.env.template](.env.template)
-
-## Instalar OpenSSL 
-Se debe ejecutar el siguiente comando e ir colocando los datos respectivos:
-```cmd
-    openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+1. Clonar repositorio
+2. Instalar modulos de node
+2.1. Crear el archivo de variables de entorno respectivo con las configuracion mostrada en el [.env.template](.env.template)
+3. Levantar bases de datos con el comando:
+```shell
+    npm run docker:up
 ```
-<br>
+4. Migrar bases de datos con prisma:
+```shell
+    npm run prisma:migrate
+```
+5. Correr el proyecto con el coando
+```shell
+    npm run dev
+```
+> Nota: Los pasos 4 y 5 se pueden resumir ejecutando el comando ***npm run devup***
 
-El caso anterior funciona de una vez con **MAC y LINUX**, en caso de **WINDOWNS** se debe previamente agregar al path de variables de entorno la ubicacion del ejecutable del openSSL que se instala con la intalacion de GIT. La ruta a la carpeta es la siguiente:
-> "C:\Program Files\Git\usr\bin"
-<br>
-Esta ruta puede cambiar segun tu maquina. 🙂
-
-Esta varibale de entorno se debe agregar a las variables de **path**, posteior a esto ya debe poder ejecutar el comando mencionado al principio
-
-> ***Nota*** Los certificados generados deben guardarse en la carpeta *keys* en la raiz del proyecto, si no existe crearla
+### Pasos comandos
+1. Correr en modo desarrollo comprobando errores de lintado:
+```shell 
+    npm run dev:analize
+```
+2. Migrar base de datos a produccion con prisma
+```shell
+    npm run prisma:migrate:prod
+```
