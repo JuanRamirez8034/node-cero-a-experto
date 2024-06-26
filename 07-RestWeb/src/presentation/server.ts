@@ -53,7 +53,7 @@ export class Server {
     });
   }
 
-  private _logRequestPathMiddleWare(req:Request, _:any, next:NextFunction){
+  private _logRequestPathMiddleWare(req:Request, _:unknown, next:NextFunction){
     console.log(`${req.method.toUpperCase()} ${req.url}`);
     next();
   }

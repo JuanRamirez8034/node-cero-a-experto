@@ -35,13 +35,13 @@ export class UpdateTodoDto implements UpdateTodoDtoModel {
    * @param props {[key:string]: any}
    * @returns Tupla que representa el error o la instancia del dto de todo
    */
-  public static create(props: {[key:string]: any}): [string|null, UpdateTodoDto | null] {
+  public static create(props: {[key:string]: string | number | null | Date | undefined}): [string|null, UpdateTodoDto | null] {
     const { text, createdAt, id } = props;
     let _createdAt : Date | null | undefined = undefined;
 
     // validaciones
     if(!id) return ['The id property is undefined', null];
-    if(isNaN( parseInt(id) )) return ['The id property is not a number', null];
+    if(isNaN( parseInt(`${id}`) )) return ['The id property is not a number', null];
     if(createdAt === undefined && text === undefined) return ['The properties to updated invaild or undefined', null];
     if(text && typeof text !== 'string') return ['The text property is not a string', null];
     if(text && `${text}`.trim().length === 0) return ['The text property is an empty string', null];
@@ -50,10 +50,10 @@ export class UpdateTodoDto implements UpdateTodoDtoModel {
       if(createdAt !== null && typeof createdAt === 'string' && createdAt.trim().length === 0) return ['The createdAt property is not a date, empty string is invaild', null];
       _createdAt = (createdAt === null) ? null : new Date(createdAt);
       if(`${_createdAt}`.toLowerCase() === 'Invalid Date'.toLowerCase()) return ['The createdAt property is not a date format valid', null];
-    };
+    }
 
     
-    return [null, new UpdateTodoDto(id, text, _createdAt)];
+    return [null, new UpdateTodoDto(parseInt(`${id}`), ((text) ? `${text}` : undefined), _createdAt)];
   }
 
 }

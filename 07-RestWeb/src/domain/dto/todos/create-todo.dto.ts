@@ -23,7 +23,7 @@ export class CreateTodoDto implements CreateTodoDtoModel {
    * @param props {[key:string]: any}
    * @returns Tupla que representa el error o la instancia del dto de todo
    */
-  public static create(props: {[key:string]: any}): [string|null, CreateTodoDto | null] {
+  public static create(props: {[key:string]: undefined | Date | string}): [string|null, CreateTodoDto | null] {
     const { text, createdAt } = props;
     // validaciones
     if(text === undefined || text === null) return ['The text property is undefined', null];
