@@ -1,3 +1,4 @@
+import compression from 'compression';
 import express, {Express, NextFunction, Request, Router} from 'express';
 import { join } from 'path';
 
@@ -33,6 +34,7 @@ export class Server {
     this._serverApp.use(this._logRequestPathMiddleWare);
     this._serverApp.use(express.json());
     this._serverApp.use(express.urlencoded({extended:true}));
+    this._serverApp.use(compression());
 
     // rutas del servidor
     this._serverApp.use(this._routes);
