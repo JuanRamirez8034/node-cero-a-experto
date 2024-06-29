@@ -2,7 +2,7 @@ import { TodoEntity } from "../../entities/todo.entity";
 import { TodoRepository } from "../../repositories/todo.repository";
 
 abstract class TodoDeleteUseCase {
-  abstract excecute(id: number): Promise<TodoEntity | null>;
+  abstract excecute(id: number): Promise<TodoEntity>;
 }
 
 /**
@@ -21,9 +21,9 @@ export class TodoDelete implements TodoDeleteUseCase {
   /**
    * Ejecutar eliminacion de un todo
    * @param id number
-   * @returns Promesa que retorna una entidad de Todo o null
+   * @returns Promesa que retorna una entidad de Todo
    */
-  public excecute(id: number): Promise<TodoEntity | null> {
+  public excecute(id: number): Promise<TodoEntity> {
     return this.repository.deleteById(id);
   }
 

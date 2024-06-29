@@ -1,3 +1,4 @@
+import { Server as ServerType } from 'http';
 import compression from 'compression';
 import express, {Express, NextFunction, Request, Router} from 'express';
 import { join } from 'path';
@@ -13,6 +14,7 @@ export interface ServerConfig {
  */
 export class Server {
 
+  private          _serverListen : undefined | ServerType;
   private readonly _serverApp : Express = express();
   private readonly _port : number;
   private readonly _publicDir : string;
@@ -50,9 +52,23 @@ export class Server {
     });
 
     // activando la escucha del servidor
-    this._serverApp.listen(this._port, () => {
+    this._serverListen = this._serverApp.listen(this._port, () => {
       console.log(`> http://localhost:${this._port}`);      
     });
+  }
+
+  /**
+   * Obtener la instancia del servidor
+   */
+  public get getServerApp(): Express{
+    return this._serverApp;
+  }
+
+  /**
+   * Terminar la ejecucion del servidor
+   */
+  public closeServer():void {
+    this._serverListen?.close();
   }
 
   private _logRequestPathMiddleWare(req:Request, _:unknown, next:NextFunction){

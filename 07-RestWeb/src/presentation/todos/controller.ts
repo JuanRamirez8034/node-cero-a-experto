@@ -1,6 +1,7 @@
 import { Request, Response} from 'express';
 import { CreateTodoDto, UpdateTodoDto } from '../../domain/dto';
 import { TodoEntity, TodoEntityConfig, TodoRepository, TodoUseCase } from '../../domain';
+import { CustomError } from '../../domain/errors/custom-error';
 
 /**
  * Controlador para las peticiones de Todo
@@ -13,6 +14,22 @@ export class TodoController {
   constructor( private readonly repository: TodoRepository ){}
 
   /**
+   * Resolver la respuesta de errores manejando la informacion de los mismos (este codigo se podria reutilizar, se puede crear aparte en un archivo)
+   * @param res Response
+   * @param error unknown
+   * @returns void
+   */
+  private _handleErrorResponse(res: Response, error: unknown): void {
+    // si es una instancia de un error personalizado regresamos informacion con este
+    if(error instanceof CustomError){
+      res.status(error.statusCode).json({ message: error.message });
+      return;
+    }
+    // si es otro tipo de erro regresamos un error interno
+    res.status(500).json({ message: 'Internal error - check server' });
+  }
+
+  /**
    * Obtener todas las tareas
    * @param req Request
    * @param res Response
@@ -22,7 +39,7 @@ export class TodoController {
     new TodoUseCase.TodoGetAll(this.repository)
       .excecute()
       .then( (todos: Array<TodoEntity>) => res.json(todos) )
-      .catch( error => res.status(500).json({ error: `Get all Todos internal error` }));
+      .catch( error => res.status(500).json({ message: `Get all Todos internal error` }));
   }
 
   /**
@@ -35,17 +52,14 @@ export class TodoController {
     const id : number = parseInt(req.params.id);
 
     if( isNaN(id) ){
-      res.status(400).json({error: `ID argument param is not a number`});
+      res.status(400).json({message: `ID argument param is not a number`});
       return;
     }
 
     new TodoUseCase.TodoGetById( this.repository )
       .excecute(id)
-      .then( (todo: TodoEntity | null) => {
-        if( todo ) return res.status(200).json(todo);          
-        return res.status(404).json({error: `Not found a todo with ID ${id}`});
-      })
-      .catch( error => res.status(500).json({ error: `Get by id todo internal error` }));
+      .then( (todo: TodoEntity) => res.status(200).json(todo))
+      .catch( error => this._handleErrorResponse(res, error));
   }
 
   /**
@@ -64,8 +78,8 @@ export class TodoController {
 
     new TodoUseCase.TodoCreate( this.repository )
       .excecute( todoDto )
-      .then( (todo: TodoEntity) => res.json(todo) )
-      .catch( error => res.status(500).json({ error: `Create new todo internal error` }) );
+      .then( (todo: TodoEntity) => res.status(201).json(todo) )
+      .catch( error => res.status(500).json({ message: `Create new todo internal error` }) );
   }
 
   /**
@@ -86,11 +100,8 @@ export class TodoController {
 
     new TodoUseCase.TodoUpdate( this.repository )
       .excecute( updateTodoDto )
-      .then( (todo: TodoEntity | null) => {
-        if( !todo ) return res.status(404).json({message: `Todo with id "${id}" not found`});
-        return res.json(todo);
-      })
-      .catch( error => res.status(500).json({ message: `internal error update todo with id "${id} error"`}) );
+      .then( (todo: TodoEntity) => res.json(todo) )
+      .catch( error => this._handleErrorResponse(res, error) );
   }
 
   /**
@@ -103,17 +114,14 @@ export class TodoController {
     const id: TodoEntityConfig['id'] = parseInt(req.params.id);
     
     if( isNaN(id) ){
-      res.status(400).json({error: `ID argument param is not a number`});
+      res.status(400).json({message: `ID argument param is not a number`});
       return;
     } 
     
     new TodoUseCase.TodoDelete( this.repository )
       .excecute( id )
-      .then( (todo: TodoEntity | null) => {
-        if( !todo ) return res.status(404).json({message: `Todo with id "${id}" not found`});
-        res.json({ message: `Todo with id "${id}" deleted`, todo });
-      })
-      .catch( error => res.status(500).json({message: `Deleted todo with id "${id}" internal error`}));
+      .then( (todo: TodoEntity) => res.json({ message: `Todo with id "${id}" deleted`, todo }) )
+      .catch( error => this._handleErrorResponse(res, error) );
   }
 
 }

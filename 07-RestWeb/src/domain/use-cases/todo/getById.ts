@@ -2,7 +2,7 @@ import { TodoEntity } from "../../entities/todo.entity";
 import { TodoRepository } from "../../repositories/todo.repository";
 
 abstract class TodoGetByIdUseCase {
-  abstract excecute(id: number): Promise<TodoEntity | null>;
+  abstract excecute(id: number): Promise<TodoEntity>;
 }
 
 /**
@@ -21,9 +21,9 @@ export class TodoGetById implements TodoGetByIdUseCase {
   /**
    * Ejecutar la obtenecion de un todo a traves de su id
    * @param id number
-   * @returns Promesa que retorna una entidad de Todo o null
+   * @returns Promesa que retorna una entidad de Todo
    */
-  public excecute(id: number): Promise<TodoEntity | null> {
+  public excecute(id: number): Promise<TodoEntity> {
     return this.repository.findById(id);
   }
 

@@ -32,27 +32,27 @@ export class TodoRepositoryImplementation implements TodoRepository {
   /**
    * Encontrar un Todo a traves de su id
    * @param id number
-   * @returns Promesa que resuelve una entidad de Todo o null
+   * @returns Promesa que resuelve una entidad de Todo
    */
-  public async findById(id: number): Promise<TodoEntity | null> {
+  public async findById(id: number): Promise<TodoEntity> {
     return this.dataSource.findById(id);
   }
   
   /**
    * Actualizar un todo a partir de su id
    * @param updateTodoDto UpdateTodoDto
-   * @returns Promesa que resuelve una entidad de Todo o null
+   * @returns Promesa que resuelve una entidad de Todo
    */
-  public async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity | null> {
+  public async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
     return this.dataSource.updateById(updateTodoDto);
   }
   
   /**
    * Eliminar un Todo a partir de una id
    * @param id number
-   * @returns Promesa que resuelve una entidad de Todo o null
+   * @returns Promesa que resuelve una entidad de Todo
    */
-  public async deleteById(id: number): Promise<TodoEntity | null> {
+  public async deleteById(id: number): Promise<TodoEntity> {
     return this.dataSource.deleteById(id);
   }
   

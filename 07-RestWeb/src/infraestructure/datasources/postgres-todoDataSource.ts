@@ -1,5 +1,6 @@
 import { prisma } from '../../data/postgres';
 import { CreateTodoDto, TodoDataSource, TodoEntity, UpdateTodoDto } from '../../domain';
+import { CustomError } from '../../domain/errors/custom-error';
 
 export class PostgresTodoDataSource implements TodoDataSource {
   
@@ -27,21 +28,21 @@ export class PostgresTodoDataSource implements TodoDataSource {
   /**
    * Obtener un Todo a partir de una id
    * @param id number
-   * @returns Promsea que retorna una entidad de un Todo o null
+   * @returns Promsea que retorna una entidad de un Todo
    */
-  public async findById(id: number): Promise<TodoEntity | null> {
+  public async findById(id: number): Promise<TodoEntity> {
     const todo = await prisma.todo.findFirst({where: { id }});
-    return (todo === null) ? null : TodoEntity.fromObject(todo);
+    if(todo === null) throw new CustomError(`Todo with id "${id}" not found`, 404);
+    return TodoEntity.fromObject(todo);
   }
 
   /**
    * Actualizar un Todo a traves de su id
    * @param updateTodoDto UpdateTodoDto
-   * @returns Promsesa que resuleve un null o una entidad de Todo
+   * @returns Promsesa que resuleve una entidad de Todo
    */
-  public async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity | null> {
-    const todoEntity = await this.findById(updateTodoDto.id);
-    if(todoEntity === null) return null;
+  public async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
+    await this.findById(updateTodoDto.id);
 
     const updatedTodo = await prisma.todo.update({
       where: { id: updateTodoDto.id },
@@ -55,9 +56,8 @@ export class PostgresTodoDataSource implements TodoDataSource {
    * @param id number
    * @returns Promsea que resuelte una entidad de Todo
    */
-  public async deleteById(id: number): Promise<TodoEntity | null> {
-    const todoEntity = await this.findById(id);
-    if(todoEntity === null) return null;
+  public async deleteById(id: number): Promise<TodoEntity> {
+    await this.findById(id);
 
     const todoDeleted = await prisma.todo.delete({ where: { id: id } });    
     return TodoEntity.fromObject(todoDeleted);

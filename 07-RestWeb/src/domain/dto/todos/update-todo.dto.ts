@@ -43,11 +43,12 @@ export class UpdateTodoDto implements UpdateTodoDtoModel {
     if(!id) return ['The id property is undefined', null];
     if(isNaN( parseInt(`${id}`) )) return ['The id property is not a number', null];
     if(createdAt === undefined && text === undefined) return ['The properties to updated invaild or undefined', null];
-    if(text && typeof text !== 'string') return ['The text property is not a string', null];
-    if(text && `${text}`.trim().length === 0) return ['The text property is an empty string', null];
-
+    if(text === null || (text !== undefined && typeof text !== 'string')) return ['The text property is not a string', null];
+    if(text !== undefined && `${text}`.trim().length === 0) return ['The text property is an empty string', null];
+    
     if(createdAt !== undefined){
       if(createdAt !== null && typeof createdAt === 'string' && createdAt.trim().length === 0) return ['The createdAt property is not a date, empty string is invaild', null];
+      if(createdAt !== null && typeof createdAt === 'boolean') return ['The createdAt property is not a date, boolean is invaild', null];
       _createdAt = (createdAt === null) ? null : new Date(createdAt);
       if(`${_createdAt}`.toLowerCase() === 'Invalid Date'.toLowerCase()) return ['The createdAt property is not a date format valid', null];
     }
